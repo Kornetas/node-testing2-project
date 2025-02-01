@@ -1,7 +1,15 @@
-const enviroment = process.env.NODE_ENV || "development";
+const environment = process.env.NODE_ENV === "test" ? "test" : "development";
+const knexConfig = require("./knexfile");
 
-const config = require("./knexfile")[enviroment];
+
+
+const config = knexConfig[environment];
+
+if (!config) {
+  throw new Error(
+    `Knex configuration for environment '${environment}' not found!`
+  );
+}
 
 const knex = require("knex")(config);
-
 module.exports = knex;
